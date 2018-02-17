@@ -1,6 +1,7 @@
-roboarm_controller:
-  type: "position_controllers/JointTrajectoryController"
-  joints:
-    hip_joint
-    shoulder_joint
-    elbow_joint
+roboarm:
+  joint_trajectory_controller:
+    type: "position_controllers/JointTrajectoryController"
+    joints:
+      - hip_joint
+      - shoulder_joint
+      - elbow_joint
