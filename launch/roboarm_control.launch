@@ -2,7 +2,7 @@
 
 <launch>
 
-	<rosparam file="$(find roboarm)/config/controllers.yaml" command="load"/>
+	<rosparam file="$(find roboarm)/config/roboarm_controllers.yaml" command="load"/>
 
 	<node name="controller_spawner" pkg="controller_manager" type="spawner" args="roboarm_controller"/>
 
