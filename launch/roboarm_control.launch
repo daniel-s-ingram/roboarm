@@ -4,6 +4,12 @@
 
 	<rosparam file="$(find roboarm)/config/roboarm_controllers.yaml" command="load"/>
 
-	<node name="controller_spawner" pkg="controller_manager" type="spawner" args="roboarm_controller"/>
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+		output="screen" ns="/roboarm" args="joint_trajectory_controller"/>
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+		respawn="false" output="screen">
+		<remap from="/joint_states" to="roboarm/joint_states"/>
+	</node>
 
 </launch>
