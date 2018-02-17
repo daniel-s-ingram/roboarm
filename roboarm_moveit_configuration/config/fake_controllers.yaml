@@ -1,0 +1,6 @@
+controller_list:
+  - name: fake_roboarm_controller
+    joints:
+      - hip_joint
+      - shoulder_joint
+      - elbow_joint
