@@ -11,3 +11,4 @@ catkin build roboarm_moveit_configuration
 source ~/your_catkin_ws/devel/setup.bash
 roslaunch roboarm roboarm.launch
 ```
+Building roboarm_moveit_configuration also builds roboarm.
