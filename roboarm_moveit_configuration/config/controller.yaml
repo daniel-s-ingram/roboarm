@@ -1,9 +1,5 @@
-controller_manager_ns: /roboarm
 controller_list:
-  - name: joint_trajectory_controller
+  - name: roboarm/joint_trajectory_controller
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
-    joints:
-      - hip_joint
-      - shoulder_joint
-      - elbow_joint
+    joints: [hip_joint, shoulder_joint, elbow_joint]
