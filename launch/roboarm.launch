@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find roboarm)/urdf/roboarm.urdf.xacro'" />
+
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model roboarm -param robot_description"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find roboarm)/world/empty.world"/>
+  </include>
+
+  <include file="$(find roboarm)/launch/roboarm_control.launch"/>
+
+</launch>

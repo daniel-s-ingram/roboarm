@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+
+	<rosparam file="$(find roboarm)/config/controllers.yaml" command="load"/>
+
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" args="roboarm_controller"/>
+
+</launch>
