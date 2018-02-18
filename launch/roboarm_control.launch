@@ -5,14 +5,15 @@
 	<rosparam file="$(find roboarm)/config/roboarm_controllers.yaml" command="load"/>
 
 	<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-		output="screen" ns="/roboarm" args="joint_trajectory_controller"/>
+		output="screen" ns="/roboarm" args="joint_trajectory_controller gripper_controller"/>
 
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
 		respawn="false" output="screen">
-		<remap from="/joint_states" to="roboarm/joint_states"/>
+		<remap from="/joint_states" to="/roboarm/joint_states"/>
 	</node>
 
 	<include file="$(find roboarm_moveit_configuration)/launch/move_group.launch"/>
+
 	<include file="$(find roboarm_moveit_configuration)/launch/moveit_rviz.launch">
 		<arg name="config" value="True"/>
 	</include>
