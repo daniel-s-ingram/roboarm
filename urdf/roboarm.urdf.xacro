@@ -23,7 +23,7 @@
 
 	<xacro:property name="gripper_mass" value="0.1"/>
 	<xacro:property name="gripper_height" value="0.01"/>
-	<xacro:property name="gripper_length" value="0.2"/>
+	<xacro:property name="gripper_length" value="0.1"/>
 	<xacro:property name="gripper_width" value="0.025"/>
 
 	<link name="world"/>
@@ -352,7 +352,7 @@
 		<child link="gripper_lower_left_link"/>
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<axis xyz="0 1 0"/>
-		<limit lower="0.0" upper="${pi/4}" velocity="10.0" effort="10.0"/>
+		<limit lower="0.0" upper="${pi/5}" velocity="1.0" effort="10.0"/>
 	</joint>
 
 	<joint name="gripper_lower_right_joint" type="revolute">
@@ -360,23 +360,23 @@
 		<child link="gripper_lower_right_link"/>
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<axis xyz="0 1 0"/>
-		<limit lower="0.0" upper="${pi/4}" velocity="10.0" effort="10.0"/>
+		<limit lower="${-pi/5}" upper="0.0" velocity="1.0" effort="10.0"/>
 	</joint>
 
 	<joint name="gripper_upper_left_joint" type="revolute">
 		<parent link="gripper_lower_left_link"/>
 		<child link="gripper_upper_left_link"/>
-		<origin xyz="${gripper_length*cos(pi/4)} 0 ${gripper_length*sin(pi/4)}" rpy="0 0 0"/>
+		<origin xyz="${-gripper_length*cos(pi/4)} 0 ${gripper_length*sin(pi/4)}" rpy="0 0 0"/>
 		<axis xyz="0 1 0"/>
-		<limit lower="0.0" upper="${pi/4}" velocity="10.0" effort="10.0"/>
+		<limit lower="${-pi/5}" upper="0.0" velocity="1.0" effort="10.0"/>
 	</joint>
 
 	<joint name="gripper_upper_right_joint" type="revolute">
 		<parent link="gripper_lower_right_link"/>
 		<child link="gripper_upper_right_link"/>
-		<origin xyz="${-gripper_length*cos(pi/4)} 0 ${gripper_length*sin(pi/4)}" rpy="0 0 0"/>
+		<origin xyz="${gripper_length*cos(pi/4)} 0 ${gripper_length*sin(pi/4)}" rpy="0 0 0"/>
 		<axis xyz="0 1 0"/>
-		<limit lower="0.0" upper="${pi/4}" velocity="10.0" effort="10.0"/>
+		<limit lower="0.0" upper="${pi/5}" velocity="1.0" effort="10.0"/>
 	</joint>
 
 	<transmission name="hip_transmission">
@@ -457,6 +457,58 @@
 		</actuator>
 	</transmission>
 
+	<transmission name="gripper_lower_left_transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+
+		<joint name="gripper_lower_left_joint">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+
+		<actuator name="gripper_lower_left_motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<transmission name="gripper_lower_right_transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+
+		<joint name="gripper_lower_right_joint">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+
+		<actuator name="gripper_lower_right_motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<transmission name="gripper_upper_left_transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+
+		<joint name="gripper_upper_left_joint">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+
+		<actuator name="gripper_upper_left_motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<transmission name="gripper_upper_right_transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+
+		<joint name="gripper_upper_right_joint">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+
+		<actuator name="gripper_upper_right_motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
 	<gazebo>
 		<static>false</static>
 
@@ -468,6 +520,30 @@
 			<jointName>hip_joint, shoulder_joint, elbow_joint, wrist_yaw_joint, wrist_pitch_joint, wrist_roll_joint,
 				gripper_lower_left_joint, gripper_lower_right_joint, gripper_upper_left_joint, gripper_upper_right_joint</jointName>
 			<robotNamespace>/roboarm</robotNamespace>
+		</plugin>
+
+		<plugin name = "lower_right_mimic_joint" filename = "libroboticsgroup_gazebo_mimic_joint_plugin.so">
+			<robotNamespace> /roboarm </robotNamespace>
+			<joint> gripper_lower_left_joint </joint>
+			<mimicJoint> gripper_lower_right_joint </mimicJoint>
+			<multiplier> -1 </multiplier>
+			<offset> 0 </offset>
+		</plugin>
+
+		<plugin name = "upper_left_mimic_joint" filename = "libroboticsgroup_gazebo_mimic_joint_plugin.so">
+			<robotNamespace> /roboarm </robotNamespace>
+			<joint> gripper_lower_left_joint </joint>
+			<mimicJoint> gripper_upper_left_joint </mimicJoint>
+			<multiplier> -0.8 </multiplier>
+			<offset> 0 </offset>
+		</plugin>
+
+		<plugin name = "upper_right_mimic_joint" filename = "libroboticsgroup_gazebo_mimic_joint_plugin.so">
+			<robotNamespace> /roboarm </robotNamespace>
+			<joint> gripper_lower_left_joint </joint>
+			<mimicJoint> gripper_upper_right_joint </mimicJoint>
+			<multiplier> 0.8 </multiplier>
+			<offset> 0 </offset>
 		</plugin>
 	</gazebo>
 
