@@ -18,6 +18,9 @@
 	<xacro:property name="elbow_length" value="0.9"/>
 	<xacro:property name="elbow_radius" value="0.1"/>
 
+	<xacro:property name="wrist_mass" value="1.0"/>
+	<xacro:property name="wrist_radius" value="0.05"/>
+
 	<xacro:property name="pi" value="3.141492653589793"/>
 
 	<link name="world"/>
@@ -129,6 +132,59 @@
 		</collision>
 	</link>
 
+	<link name="wrist_yaw_link">
+		<inertial>
+			<mass value="${wrist_mass}"/>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<inertia ixx="${2*wrist_mass*wrist_radius*wrist_radius/5}"
+					 ixy="0.0"
+					 ixz="0.0"
+					 iyy="${2*wrist_mass*wrist_radius*wrist_radius/5}"
+					 iyz="0.0"
+					 izz="${2*wrist_mass*wrist_radius*wrist_radius/5}"/>
+		</inertial>
+
+		<visual name="wrist_yaw_link_visual">
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<sphere radius="${wrist_radius}"/>
+			</geometry>
+		</visual>
+
+		<collision name="wrist_yaw_link_collision">
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<sphere radius="${wrist_radius}"/>
+			</geometry>
+		</collision>
+	</link>
+
+	<link name="wrist_pitch_link">
+		<inertial>
+			<mass value="${wrist_mass}"/>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<inertia ixx="${2*wrist_mass*wrist_radius*wrist_radius/5}"
+					 ixy="0.0"
+					 ixz="0.0"
+					 iyy="${2*wrist_mass*wrist_radius*wrist_radius/5}"
+					 iyz="0.0"
+					 izz="${2*wrist_mass*wrist_radius*wrist_radius/5}"/>
+		</inertial>
+	</link>
+
+	<link name="wrist_roll_link">
+		<inertial>
+			<mass value="${wrist_mass}"/>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<inertia ixx="${2*wrist_mass*wrist_radius*wrist_radius/5}"
+					 ixy="0.0"
+					 ixz="0.0"
+					 iyy="${2*wrist_mass*wrist_radius*wrist_radius/5}"
+					 iyz="0.0"
+					 izz="${2*wrist_mass*wrist_radius*wrist_radius/5}"/>
+		</inertial>
+	</link>
+
 	<joint name="world_joint" type="fixed">
 		<parent link="world"/>
 		<child link="base_link"/>
@@ -155,6 +211,29 @@
 		<origin xyz="0 0 ${shoulder_length-elbow_radius}" rpy="0 0 0"/>
 		<axis xyz="1 0 0"/>
 		<limit lower="${-pi}" upper="${pi}" velocity="10.0" effort="10.0"/>
+	</joint>
+
+	<joint name="wrist_yaw_joint" type="revolute">
+		<parent link="elbow_link"/>
+		<child link="wrist_yaw_link"/>
+		<origin xyz="0 0 ${elbow_length-elbow_radius}" rpy="0 0 0"/>
+		<axis xyz="0 1 0"/>
+		<limit lower="${-pi/2}" upper="${pi/2}" velocity="10.0" effort="10.0"/>
+	</joint>
+
+	<joint name="wrist_pitch_joint" type="revolute">
+		<parent link="wrist_yaw_link"/>
+		<child link="wrist_pitch_link"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<axis xyz="1 0 0"/>
+		<limit lower="${-pi/2}" upper="${pi/2}" velocity="10.0" effort="10.0"/>
+	</joint>
+
+	<joint name="wrist_roll_joint" type="continuous">
+		<parent link="wrist_pitch_link"/>
+		<child link="wrist_roll_link"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<axis xyz="0 0 1"/>
 	</joint>
 
 	<transmission name="hip_transmission">
@@ -196,6 +275,45 @@
 		</actuator>
 	</transmission>
 
+	<transmission name="wrist_yaw_transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		
+		<joint name="wrist_yaw_joint">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+
+		<actuator name="wrist_yaw_motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<transmission name="wrist_pitch_transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		
+		<joint name="wrist_pitch_joint">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+
+		<actuator name="wrist_pitch_motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<transmission name="wrist_roll_transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		
+		<joint name="wrist_roll_joint">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+
+		<actuator name="wrist_roll_motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
 	<gazebo>
 		<static>false</static>
 
@@ -204,7 +322,7 @@
 		</plugin>
 
 		<plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-			<jointName>hip_joint, shoulder_joint, elbow_joint</jointName>
+			<jointName>hip_joint, shoulder_joint, elbow_joint, wrist_yaw_joint, wrist_pitch_joint, wrist_roll_joint</jointName>
 			<robotNamespace>/roboarm</robotNamespace>
 		</plugin>
 	</gazebo>
