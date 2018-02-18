@@ -10,16 +10,41 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="roboarm">
+        <link name="world" />
+        <link name="base_link" />
+        <link name="hip_link" />
+        <link name="shoulder_link" />
+        <link name="elbow_link" />
+        <link name="wrist_yaw_link" />
+        <link name="wrist_pitch_link" />
+        <link name="wrist_roll_link" />
         <joint name="world_joint" />
         <joint name="hip_joint" />
         <joint name="shoulder_joint" />
         <joint name="elbow_joint" />
+        <joint name="wrist_yaw_joint" />
+        <joint name="wrist_pitch_joint" />
+        <joint name="wrist_roll_joint" />
     </group>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="gripper" parent_link="elbow_link" group="roboarm" />
+    <end_effector name="gripper" parent_link="wrist_roll_link" group="roboarm" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="base_link" link2="hip_link" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="shoulder_link" reason="Never" />
+    <disable_collisions link1="elbow_link" link2="gripper_lower_left_link" reason="Default" />
+    <disable_collisions link1="elbow_link" link2="gripper_lower_right_link" reason="Default" />
+    <disable_collisions link1="elbow_link" link2="gripper_upper_right_link" reason="Never" />
     <disable_collisions link1="elbow_link" link2="shoulder_link" reason="Adjacent" />
+    <disable_collisions link1="elbow_link" link2="wrist_yaw_link" reason="Adjacent" />
+    <disable_collisions link1="gripper_lower_left_link" link2="gripper_lower_right_link" reason="Adjacent" />
+    <disable_collisions link1="gripper_lower_left_link" link2="gripper_upper_left_link" reason="Adjacent" />
+    <disable_collisions link1="gripper_lower_left_link" link2="gripper_upper_right_link" reason="Default" />
+    <disable_collisions link1="gripper_lower_left_link" link2="wrist_yaw_link" reason="Adjacent" />
+    <disable_collisions link1="gripper_lower_right_link" link2="gripper_upper_left_link" reason="Default" />
+    <disable_collisions link1="gripper_lower_right_link" link2="gripper_upper_right_link" reason="Adjacent" />
+    <disable_collisions link1="gripper_lower_right_link" link2="wrist_yaw_link" reason="Adjacent" />
+    <disable_collisions link1="gripper_upper_left_link" link2="wrist_yaw_link" reason="Never" />
+    <disable_collisions link1="gripper_upper_right_link" link2="wrist_yaw_link" reason="Never" />
     <disable_collisions link1="hip_link" link2="shoulder_link" reason="Adjacent" />
+    <disable_collisions link1="shoulder_link" link2="wrist_yaw_link" reason="Never" />
 </robot>

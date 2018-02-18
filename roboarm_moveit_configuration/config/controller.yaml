@@ -2,4 +2,4 @@ controller_list:
   - name: roboarm/joint_trajectory_controller
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
-    joints: [hip_joint, shoulder_joint, elbow_joint]
+    joints: [hip_joint, shoulder_joint, elbow_joint, wrist_yaw_joint, wrist_pitch_joint, wrist_roll_joint]
