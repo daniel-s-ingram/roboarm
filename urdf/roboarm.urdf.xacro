@@ -296,6 +296,8 @@
 		</collision>
 	</link>
 
+	<link name="gripper"/>
+
 	<joint name="world_joint" type="fixed">
 		<parent link="world"/>
 		<child link="base_link"/>
@@ -377,6 +379,11 @@
 		<origin xyz="${gripper_length*cos(pi/4)} 0 ${gripper_length*sin(pi/4)}" rpy="0 0 0"/>
 		<axis xyz="0 1 0"/>
 		<limit lower="0.0" upper="${pi/5}" velocity="1.0" effort="10.0"/>
+	</joint>
+
+	<joint name="gripper_joint" type="fixed">
+		<parent link="wrist_roll_link"/>
+		<child link="gripper"/>
 	</joint>
 
 	<transmission name="hip_transmission">
@@ -534,7 +541,7 @@
 			<robotNamespace> /roboarm </robotNamespace>
 			<joint> gripper_lower_left_joint </joint>
 			<mimicJoint> gripper_upper_left_joint </mimicJoint>
-			<multiplier> -0.8 </multiplier>
+			<multiplier> -1 </multiplier>
 			<offset> 0 </offset>
 		</plugin>
 
@@ -542,8 +549,26 @@
 			<robotNamespace> /roboarm </robotNamespace>
 			<joint> gripper_lower_left_joint </joint>
 			<mimicJoint> gripper_upper_right_joint </mimicJoint>
-			<multiplier> 0.8 </multiplier>
+			<multiplier> 1 </multiplier>
 			<offset> 0 </offset>
+		</plugin>
+
+		<plugin name="gazebo_grasp_fix" filename="libgazebo_grasp_fix.so">
+			<arm>
+				<arm_name>roboarm</arm_name>
+				<palm_link> wrist_roll_link  </palm_link>
+				<gripper_link> gripper_lower_left_link </gripper_link>
+				<gripper_link> gripper_lower_right_link </gripper_link>
+				<gripper_link> gripper_upper_left_link </gripper_link>
+				<gripper_link> gripper_upper_right_link </gripper_link>
+			</arm>
+			<forces_angle_tolerance>100</forces_angle_tolerance>
+			<update_rate>4</update_rate>
+			<grip_count_threshold>4</grip_count_threshold>
+			<max_grip_count>8</max_grip_count>
+			<release_tolerance>0.005</release_tolerance>
+			<disable_collisions_on_attach>false</disable_collisions_on_attach>
+			<contact_topic>__default_topic__</contact_topic>
 		</plugin>
 	</gazebo>
 
