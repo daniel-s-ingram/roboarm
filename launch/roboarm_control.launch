@@ -18,4 +18,6 @@
 		<arg name="config" value="True"/>
 	</include>
 
+	<node name="roboarm_control" pkg="roboarm" type="roboarm_control.py" output="screen"/>
+
 </launch>
