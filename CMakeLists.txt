@@ -4,6 +4,20 @@ project(roboarm)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  message_generation
+  std_msgs
+  geometry_msgs
+)
+
+add_service_files(
+  FILES
+  PoseRequest.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
 )
 
 catkin_package()
