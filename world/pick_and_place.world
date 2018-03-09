@@ -13,12 +13,12 @@
 
     <include>
     	<uri>model://cafe_table</uri>
-    	<pose>-1.5 1.5 0 0 0 0</pose>
+    	<pose>-1 1 0 0 0 0</pose>
     </include>
 
     <model name="box">
     	<link name="box_link">
-    		<pose>1 1 0.1 0 0 0</pose>
+    		<pose>1.07 0.78 0.1 0 0 0</pose>
 			<visual name="box_link_visual">
 				<geometry>
 					<box>
