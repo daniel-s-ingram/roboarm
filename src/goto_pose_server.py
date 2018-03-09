@@ -5,6 +5,7 @@ import moveit_commander
 import moveit_msgs.msg
 import geometry_msgs.msg
 import tf.transformations
+from std_msgs.msg import Bool
 from roboarm.srv import PoseRequest, PoseRequestResponse
 
 def goto_pose_server(request):
@@ -15,7 +16,10 @@ def goto_pose_server(request):
 	display_trajectory.trajectory.append(plan)
 	display_trajectory_pub.publish(display_trajectory)
 
-	group.go(wait=True)
+	success = group.go(wait=True)
+	response = Bool()
+	response.data = success
+	return PoseRequestResponse(response)
 
 sys.argv.append('/joint_states:=/roboarm/joint_states')
 moveit_commander.roscpp_initialize(sys.argv)
