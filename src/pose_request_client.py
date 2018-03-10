@@ -22,22 +22,38 @@ rospy.wait_for_service('goto_pose_server')
 goto_pose = rospy.ServiceProxy('goto_pose_server', PoseRequest)
 gripper_pub = rospy.Publisher('/roboarm/gripper_controller/command', Float64, queue_size=10, latch=True)
 
-gripper_msg = Float64()
-gripper_msg.data = 0.3
-
 pose = Pose()
-set_pose(pose, 1.07, 0.78, 0.25, pi, 0, 0)
-response = goto_pose(pose)
-if response.result:
-	gripper_pub.publish(gripper_msg)
+gripper_msg = Float64()
 
-rospy.sleep(1)
+while not rospy.is_shutdown():
+	set_pose(pose, 1.07, 0.78, 0.25, pi, 0, 0)
+	response = goto_pose(pose)
+	if response.result:
+		gripper_msg.data = 0.3
+		gripper_pub.publish(gripper_msg)
 
-set_pose(pose, 0, 1, 1.2, pi, 0, 0)
-response = goto_pose(pose)
+	rospy.sleep(1)
 
-set_pose(pose, -1, 1, 1.1, pi, 0, 0)
-response = goto_pose(pose)
-if response.result:
-	gripper_msg.data = 0
-	gripper_pub.publish(gripper_msg)
+	set_pose(pose, 0, 1, 1.2, pi, 0, 0)
+	response = goto_pose(pose)
+
+	set_pose(pose, -1, 1, 1.1, pi, 0, 0)
+	response = goto_pose(pose)
+	if response.result:
+		gripper_msg.data = 0
+		gripper_pub.publish(gripper_msg)
+
+	set_pose(pose, -1, 1, 1, pi, 0, 0)
+	response = goto_pose(pose)
+	if response.result:
+		gripper_msg.data = 0.3
+		gripper_pub.publish(gripper_msg)
+
+	set_pose(pose, 0, 1, 1.2, pi, 0, 0)
+	response = goto_pose(pose)
+
+	set_pose(pose, 1.07, 0.78, 0.45, pi, 0, 0)
+	response = goto_pose(pose)
+	if response.result:
+		gripper_msg.data = 0
+		gripper_pub.publish(gripper_msg)
